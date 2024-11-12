@@ -9,35 +9,35 @@ CC=gcc
 all: sstmemtrace.so
 
 sstmemtrace.so: sstmemtrace.o
-	$(LD) -Wl,--hash-style=sysv -shared -Wl,-Bsymbolic \
-		-Wl,--version-script=$(PINDIR)/source/include/pin/pintool.ver \
-		-L$(PINDIR)/extras/xed-intel64/lib \
-		-L$(PINDIR)/intel64/lib \
-		-L$(PINDIR)/intel64/runtime/pincrt \
-		-L$(PINDIR)/intel64/lib-ext \
-		-o $@ $< \
-		-L$(PINDIR)/extras/xed-intel64/lib \
-		-L$(PINDIR)/intel64/lib \
-		-L$(PINDIR)/intel64/runtime/pincrt \
-		-L$(PINDIR)/intel64/lib-ext -lpin -lxed \
-		 -ldl -lz -lpindwarf \
+        $(LD) -Wl,--hash-style=sysv -shared -Wl,-Bsymbolic \
+                -Wl,--version-script=$(PINDIR)/source/include/pin/pintool.ver -fabi-version=2 \
+                -L$(PINDIR)/extras/xed-intel64/lib \
+                -L$(PINDIR)/intel64/lib \
+                -L$(PINDIR)/intel64/runtime/pincrt \
+                -L$(PINDIR)/intel64/lib-ext \
+                -o $@ $< \
+                -L$(PINDIR)/extras/xed-intel64/lib \
+                -L$(PINDIR)/intel64/lib \
+                -L$(PINDIR)/intel64/runtime/pincrt \
+                -L$(PINDIR)/intel64/lib-ext -lpin -lxed \
+                $(PINDIR)/intel64/runtime/pincrt/crtendS.o -lpindwarf -ldwarf -ldl-dynamic -nostdlib -lc++ -lc++abi -lm-dynamic -lc-dynamic -lunwind-dynamic
 
 sstmemtrace.o: sstmemtrace.cc
-	$(CXX) -g -c -O3 -fomit-frame-pointer \
+        $(CXX) -g -c -O3 -fno-stack-protector -fno-exceptions -funwind-tables -fasynchronous-unwind-tables -fno-rtti -fomit-frame-pointer -fabi-version=2 -faligned-new \
         -Wl,-Bsymbolic \
         -Wl,--version-script=$(PINDIR)/source/include/pintool.ver \
-	-I $(PINDIR)/source/include/pin \
-	-I $(PINDIR)/source/include/pin/gen \
-	-I $(PINDIR)/extras/xed-intel64/include/xed \
-	-isystem $(PINDIR)/extras/cxx/include \
-	-isystem $(PINDIR)/extras/crt/include \
-	-isystem $(PINDIR)/extras/crt/include/arch-x86_64 \
-	-isystem $(PINDIR)/extras/crt/include/kernel/uapi \
-	-isystem $(PINDIR)/extras/crt/include/kernel/uapi/asm-x86 \
-	-I $(PINDIR)/extras/components/include \
-	$(PREPROC) \
-	-o $@ \
-	$<
+        -I $(PINDIR)/source/include/pin \
+        -I $(PINDIR)/source/include/pin/gen \
+        -I $(PINDIR)/extras/xed-intel64/include/xed \
+        -isystem $(PINDIR)/extras/cxx/include \
+        -isystem $(PINDIR)/extras/crt/include \
+        -isystem $(PINDIR)/extras/crt/include/arch-x86_64 \
+        -isystem $(PINDIR)/extras/crt/include/kernel/uapi \
+        -isystem $(PINDIR)/extras/crt/include/kernel/uapi/asm-x86 \
+        -I $(PINDIR)/extras/components/include \
+        $(PREPROC) \
+        -o $@ \
+        $<
 
 clean:
-	rm -f *.o sstmemtrace.so sstmemtrace.dylib
+        rm -f *.o sstmemtrace.so sstmemtrace.dylib
