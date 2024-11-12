@@ -3,9 +3,9 @@ import sst
 import os
 import sys,getopt
 
-Tracetype = "Type Error"
-traceFile = "File Error"
-traceDir = "Dir Error"
+Tracetype = "Text"
+traceFile = "sstprospero-0-0.trace"
+traceDir = "/social-network-microservices"
 memSize = "4096"
 useTimingDram="no"
 
