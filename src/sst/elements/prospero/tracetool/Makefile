@@ -9,7 +9,7 @@ CC=gcc
 all: sstmemtrace.so
 
 sstmemtrace.so: sstmemtrace.o
-        $(LD) -Wl,--hash-style=sysv -shared -Wl,-Bsymbolic \
+	$(LD) -Wl,--hash-style=sysv -shared -Wl,-Bsymbolic \
                 -Wl,--version-script=$(PINDIR)/source/include/pin/pintool.ver -fabi-version=2 \
                 -L$(PINDIR)/extras/xed-intel64/lib \
                 -L$(PINDIR)/intel64/lib \
@@ -23,7 +23,7 @@ sstmemtrace.so: sstmemtrace.o
                 $(PINDIR)/intel64/runtime/pincrt/crtendS.o -lpindwarf -ldwarf -ldl-dynamic -nostdlib -lc++ -lc++abi -lm-dynamic -lc-dynamic -lunwind-dynamic
 
 sstmemtrace.o: sstmemtrace.cc
-        $(CXX) -g -c -O3 -fno-stack-protector -fno-exceptions -funwind-tables -fasynchronous-unwind-tables -fno-rtti -fomit-frame-pointer -fabi-version=2 -faligned-new \
+	$(CXX) -g -c -O3 -fno-stack-protector -fno-exceptions -funwind-tables -fasynchronous-unwind-tables -fno-rtti -fomit-frame-pointer -fabi-version=2 -faligned-new \
         -Wl,-Bsymbolic \
         -Wl,--version-script=$(PINDIR)/source/include/pintool.ver \
         -I $(PINDIR)/source/include/pin \
@@ -40,4 +40,4 @@ sstmemtrace.o: sstmemtrace.cc
         $<
 
 clean:
-        rm -f *.o sstmemtrace.so sstmemtrace.dylib
+	rm -f *.o sstmemtrace.so sstmemtrace.dylib
